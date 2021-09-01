@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.employeeRegistration.AppUser.AppUser;
 import com.example.employeeRegistration.AppUser.AppUserRole;
+import com.example.employeeRegistration.token.ConfirmationToken;
+import com.example.employeeRegistration.token.ConfirmationTokenService;
 
 import lombok.AllArgsConstructor;
 
@@ -17,6 +19,7 @@ public class RegistrationService {
 
 	private final com.example.employeeRegistration.AppUser.AppUserService appUserService;
 	private final EmailValidation emailValidation;
+	 private final ConfirmationTokenService confirmationTokenService;
 	
 	
 	public String register(registrationRequest request) {
@@ -34,28 +37,30 @@ public class RegistrationService {
 	                        AppUserRole.USER));
 		 
 		 return token;
+	
 	}
 	
-	@Transactional
-	    public String confirmToken(String token) {
-	        ConfirmationToken confirmationToken = confirmationTokenService
-	                .getToken(token)
-	                .orElseThrow(() ->
-	                        new IllegalStateException("token not found"));
 
-	        if (confirmationToken.getConfirmedAt() != null) {
-	            throw new IllegalStateException("email already confirmed");
-	        }
+    @Transactional
+    public String confirmToken(String token) {
+        ConfirmationToken confirmationToken = confirmationTokenService
+                .getToken(token)
+                .orElseThrow(() ->
+                        new IllegalStateException("token not found"));
 
-	        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+        if (confirmationToken.getConfirmedAt() != null) {
+            throw new IllegalStateException("email already confirmed");
+        }
 
-	        if (expiredAt.isBefore(LocalDateTime.now())) {
-	            throw new IllegalStateException("token expired");
-	        }
+        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
-	        confirmationTokenService.setConfirmedAt(token);
-	        appUserService.enableAppUser(
-	                confirmationToken.getAppUser().getEmail());
-	        return "confirmed";
-	    }
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("token expired");
+        }
+
+        confirmationTokenService.setConfirmedAt(token);
+        appUserService.enableAppUser(
+                confirmationToken.getAppUser().getEmail());
+        return "confirmed";
+    }
 }
