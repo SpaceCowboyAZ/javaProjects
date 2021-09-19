@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service // use service for readability
 
@@ -23,5 +25,13 @@ public class StudentService {
 
 	public List<Student> getStudents() {
 		 return studentRepository.findAll();
-}
-}
+		 
+	}
+		 
+		 public void addNewStudent(Student student) {
+			 
+}	
+		
+		
+	}
+

@@ -1,6 +1,7 @@
 package com.example.demo.student;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 
 
@@ -27,7 +29,8 @@ private Long id;
 private String name;
 private String email;
 private LocalDate dob;
-private Integer age;
+@Transient // used to indicate that a field is not to be persisted or ignore fields to save in the database.
+private Integer age; //will calculate age for us because we're breaking the matrix here.
 
 
 //constructors
@@ -38,24 +41,24 @@ public Student() {
 public Student (Long id,
 		String name,
 		String email,
-		LocalDate dob,
-		Integer age) {
+		LocalDate dob
+		) {
 	this.id = id;
 	this.name = name;
 	this.email = email;
 	this.dob = dob; 
-	this.age = age;
+	
 }
 //database will generate id for us so no need right here
 public Student (String name,
 		String email,
-		LocalDate dob,
-		Integer age) {
+		LocalDate dob
+		) {
 	
 	this.name = name;
 	this.email = email;
 	this.dob = dob; 
-	this.age = age;
+	
 }
 
 //getters and setters 
@@ -94,7 +97,7 @@ public void setEmail(String email) {
  }
  
  public Integer getAge() {
-	 return age;
+	 return Period.between(dob, LocalDate.now()).getYears();  //period used to represent an amount of time using date-based values.
  }
  
  public void setAge(Integer age) {

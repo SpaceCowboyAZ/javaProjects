@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository // responsible for data access
 public interface StudentRepository extends JpaRepository<Student, Long> { //object and PK (ID)
+	
 
 }

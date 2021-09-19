@@ -16,14 +16,13 @@ public class StudentConfig {
 		Student anakin = new Student(
 				 1L, "Anakin",
 				 "MasterSkyWalker@jediCouncil.com",
-				 LocalDate.of(1983, 8, 15),
-				 24);
+				 LocalDate.of(1983, 8, 15));
+
 		 
 		 Student Ahsoka = new Student( //database will generate id
 				 "Ahsoka",
 				 "Ahsoka@jediCouncil.com",
-				 LocalDate.of(1993, 5, 16),
-				 21);
+				 LocalDate.of(1993, 5, 16));
 	
 	
 	//saves to database

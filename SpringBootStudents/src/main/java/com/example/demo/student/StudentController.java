@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,5 +35,14 @@ public StudentController(StudentService studentService) {
  public List<Student> getStudents() {
 	 return studentService.getStudents();
  }
+	//post
+	@PostMapping
+	public void addNewStudent(@RequestBody Student student) { //This annotation indicates that Spring should deserialize a request body into an object. 
+															  // This object is passed as a handler method parameter.
+	System.out.println(student);
+	
+	}
+	
+
 }
 
