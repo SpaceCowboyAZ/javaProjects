@@ -2,6 +2,7 @@ package com.example.demo.student;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,10 +29,28 @@ public class StudentService {
 		 
 	}
 		 
-		 public void addNewStudent(Student student) {
-			 
-}	
-		
-		
-	}
+		 public void addNewStudent(Student student) { 
+			Optional<Student> studentByEmail = studentRepository.findStudentByEmail(student.getEmail());
+			
+			if (studentByEmail.isPresent()) {
+				throw new IllegalStateException("email taken");
+			}
+			
+			 studentRepository.save(student); //saves student if email isn't present 
+}
 
+		public void deleteStudent(Long studentId) {
+		boolean exists = studentRepository.existsById(studentId);
+		if (!exists) {
+			throw new IllegalStateException("student with id" + studentId + "does not exist");
+			
+		}
+
+		studentRepository.deleteById(studentId);
+			
+		}	
+		 
+}
+		
+		
+	
