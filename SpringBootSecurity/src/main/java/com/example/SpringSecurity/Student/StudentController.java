@@ -17,7 +17,7 @@ new Student (1, "Anakin SkyWalker"),
 new Student (2, "Ahsoka Tanyo"),
 	new Student (3, "Obi Won Kenobi"));
 	
-	@GetMapping(path = "/{studentId}")
+	@GetMapping(path = "{studentId}")
 	public Student getStudent(@PathVariable("studentId")Integer studentId) {
 		return STUDENTS.stream()
 				.filter(student -> studentId.equals(student.getStudentId()))
