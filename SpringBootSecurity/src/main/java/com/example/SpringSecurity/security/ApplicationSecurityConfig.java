@@ -47,12 +47,18 @@ public ApplicationSecurityConfig(PasswordEncoder passwordEncoder) {
 protected UserDetailsService userDetailsService() {  //UserDetailsService retreives users from database
 	UserDetails AnakinSkyWalkerUser = User.builder()
 			.username("Anakin SkyWalker")
-			.password("password")
+			.password(passwordEncoder.encode("password"))
 			.roles("STUDENT") //ROLE_STUDENT
 			.build();
-			return new InMemoryUserDetailsManager(
-					AnakinSkyWalkerUser);
+//			return new InMemoryUserDetailsManager(
+//					AnakinSkyWalkerUser);
 
+			UserDetails obiUser = User.builder()
+			.username("Obi Won Kenobi")
+			.password(passwordEncoder.encode("password123"))
+			.roles("ADMIN")
+			.build();
+			return new InMemoryUserDetailsManager(AnakinSkyWalkerUser, obiUser);
 }
 
 }
