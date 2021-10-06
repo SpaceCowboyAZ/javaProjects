@@ -57,9 +57,16 @@ protected UserDetailsService userDetailsService() {  //UserDetailsService retrei
 			UserDetails obiUser = User.builder()
 			.username("Obi Won Kenobi")
 			.password(passwordEncoder.encode("password123"))
-			.roles(ApplicationUserRole.ADMIN.name())
+			.roles(ApplicationUserRole.ADMIN.name()) //ROLE_ADMIN
 			.build();
-			return new InMemoryUserDetailsManager(AnakinSkyWalkerUser, obiUser);
+			
+			
+			UserDetails ahsokaUser = User.builder()
+					.username("Ahsoka Tanyo")
+					.password(passwordEncoder.encode("password123"))
+					.roles(ApplicationUserRole.ADMINTRAINEE.name()) //ROLE_ADNINTRAINEE
+					.build();
+					return new InMemoryUserDetailsManager(AnakinSkyWalkerUser, obiUser, ahsokaUser);
 }
 
 }
