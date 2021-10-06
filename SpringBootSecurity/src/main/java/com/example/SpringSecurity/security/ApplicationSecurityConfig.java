@@ -36,6 +36,7 @@ public ApplicationSecurityConfig(PasswordEncoder passwordEncoder) {
 		.authorizeRequests()
 		.antMatchers("/", "index", "/css/*", "/js/*") // allow requests go thorugh root, index, css, and javascript
 		.permitAll()  //permits patterns above
+		.antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
 		.anyRequest()
 		.authenticated()
 		.and()
@@ -48,7 +49,7 @@ protected UserDetailsService userDetailsService() {  //UserDetailsService retrei
 	UserDetails AnakinSkyWalkerUser = User.builder()
 			.username("Anakin SkyWalker")
 			.password(passwordEncoder.encode("password"))
-			.roles("STUDENT") //ROLE_STUDENT
+			.roles(ApplicationUserRole.STUDENT.name()) //ROLE_STUDENT
 			.build();
 //			return new InMemoryUserDetailsManager(
 //					AnakinSkyWalkerUser);
@@ -56,7 +57,7 @@ protected UserDetailsService userDetailsService() {  //UserDetailsService retrei
 			UserDetails obiUser = User.builder()
 			.username("Obi Won Kenobi")
 			.password(passwordEncoder.encode("password123"))
-			.roles("ADMIN")
+			.roles(ApplicationUserRole.ADMIN.name())
 			.build();
 			return new InMemoryUserDetailsManager(AnakinSkyWalkerUser, obiUser);
 }

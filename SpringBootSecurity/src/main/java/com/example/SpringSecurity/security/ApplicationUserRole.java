@@ -11,8 +11,8 @@ ADMIN(Sets.newHashSet(COURSE_READ,
 	
 	private final Set<ApplicationUserPermission> permission;
 	
-	ApplicationUserRole(Set<ApplicationUserPermission> permisson) {
-		this.permission = permission;
+	ApplicationUserRole(Set<ApplicationUserPermission> permissions) {
+		this.permission = permissions;
 	}
 	
 	public Set<ApplicationUserPermission> getPermission() {
