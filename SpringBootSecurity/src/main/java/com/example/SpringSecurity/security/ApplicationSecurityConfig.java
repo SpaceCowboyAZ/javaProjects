@@ -52,7 +52,13 @@ public ApplicationSecurityConfig(PasswordEncoder passwordEncoder) {
 		.anyRequest()
 		.authenticated()
 		.and()
-		.httpBasic(); //forces authenticity of client
+		.formLogin()		// form based auth
+		.loginPage("/login").permitAll()
+		.defaultSuccessUrl("/courses", true)
+		.and()
+		.rememberMe(); //defaults to 2 weeks
+		
+		//.httpBasic(); //forces authenticity of client *reference
 	}
 
 @Override
