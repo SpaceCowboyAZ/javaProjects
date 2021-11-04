@@ -1,6 +1,8 @@
 package com.example.SpringSecurity.security;
 
 
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity 
@@ -38,15 +41,14 @@ public ApplicationSecurityConfig(PasswordEncoder passwordEncoder) {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 //		.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())    Sets up csrf. reference*
-//		.and()
+
 		.csrf().disable() //csrf - Cross Site Request Forgery
 		.authorizeRequests()
-		.antMatchers("/", "index", "/css/*", "/js/*") // allow requests go thorugh root, index, css, and javascript
+		.antMatchers("/", "index", "/css/*", "/js/*") // allow requests go through root, index, css, and javascript
 		.permitAll()  
 		.antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name()) //** selects all
-		//.antMatchers("management/api/**").hasAnyRole(ApplicationUserRole.ADMIN.name(), ApplicationUserRole.ADMINTRAINEE.name()) //do not have to include GET because it will go through the matchers 1 by 1. 
 	.antMatchers(HttpMethod.DELETE, "management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.name())
-	.antMatchers(HttpMethod.POST, "management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.name())		//kept for old reference
+	.antMatchers(HttpMethod.POST, "management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.name())		
 		.antMatchers(HttpMethod.PUT, "management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.name())
 		.antMatchers(HttpMethod.GET, "/api/**").hasRole(ApplicationUserRole.STUDENT.name())
 		.anyRequest()
@@ -56,7 +58,18 @@ public ApplicationSecurityConfig(PasswordEncoder passwordEncoder) {
 		.loginPage("/login").permitAll()
 		.defaultSuccessUrl("/courses", true)
 		.and()
-		.rememberMe(); //defaults to 2 weeks
+		.rememberMe() //defaults to 2 weeks
+		.tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21))
+		.key("somethingverysecured")
+		.and()
+		.logout()
+		.logoutUrl("/logout")
+		.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")) //if csrf is enabled, you want this to be POST to prevent attacks
+		.clearAuthentication(true)
+		.invalidateHttpSession(true)
+		.deleteCookies("JSESSIONID", "remember-me")
+		.logoutSuccessUrl("/login");
+				
 		
 		//.httpBasic(); //forces authenticity of client *reference
 	}
